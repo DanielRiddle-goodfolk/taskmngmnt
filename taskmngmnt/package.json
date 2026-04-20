@@ -1,0 +1,12 @@
+{
+  "name": "task-hub",
+  "version": "1.0.0",
+  "description": "Task management portal connected to Notion",
+  "private": true,
+  "dependencies": {
+    "@notionhq/client": "^2.2.15"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

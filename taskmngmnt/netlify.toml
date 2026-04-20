@@ -1,0 +1,18 @@
+[build]
+  publish   = "public"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# Redirect all API calls to Netlify Functions
+[[redirects]]
+  from   = "/.netlify/functions/*"
+  to     = "/.netlify/functions/:splat"
+  status = 200
+
+# Fallback — serve index.html for any unmatched path
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
