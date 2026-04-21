@@ -127,6 +127,22 @@ html,body{height:100%;font-family:var(--font);color:var(--black);background:var(
 .backdrop.show{opacity:1;pointer-events:all}
 .hidden{display:none!important}
 
+/* ── PIN Gate ────────────────────────────────────── */
+#pin-gate{position:fixed;inset:0;z-index:9999;background:var(--charcoal);display:flex;align-items:center;justify-content:center;padding:1.5rem;padding-top:calc(1.5rem + env(safe-area-inset-top));padding-bottom:calc(1.5rem + env(safe-area-inset-bottom));transition:opacity .35s ease}
+#pin-gate.pin-exit{opacity:0;pointer-events:none}
+.pin-wrap{display:flex;flex-direction:column;align-items:center;width:100%;max-width:300px}
+.pin-logo{width:180px;height:auto;margin-bottom:2.5rem;opacity:.95}
+.pin-label{font-size:.78rem;font-weight:600;color:rgba(255,255,255,.45);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.4rem}
+.pin-dots{display:flex;gap:1rem;margin-bottom:2.4rem}
+.pin-dot{width:13px;height:13px;border-radius:50%;border:2px solid rgba(255,255,255,.3);background:transparent;transition:background .12s,border-color .12s}
+.pin-dot.filled{background:var(--mint);border-color:var(--mint)}
+@keyframes pinShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+.pin-shake{animation:pinShake .5s ease}
+.pin-grid{display:grid;grid-template-columns:repeat(3,72px);grid-template-rows:repeat(4,72px);gap:.55rem}
+.pin-btn{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:#fff;font-size:1.45rem;font-weight:500;font-family:var(--font);cursor:pointer;display:flex;align-items:center;justify-content:center;-webkit-tap-highlight-color:transparent;transition:background .12s,transform .1s}
+.pin-btn:active{background:rgba(255,255,255,.25);transform:scale(.92)}
+.pin-back svg{width:22px;height:22px}
+
 /* ── Detail section labels ────────────────────────── */
 .detail-section-label{font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;gap:.4rem;margin-bottom:.6rem}
 .detail-section-label::after{content:'';flex:1;height:1px;background:var(--border)}

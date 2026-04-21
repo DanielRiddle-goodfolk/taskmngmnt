@@ -1,3 +1,72 @@
+// ── PIN Gate ───────────────────────────────────────────────────────
+const PIN_CODE   = '1990';                      // ← change this to your PIN
+const PIN_EXPIRY = 30 * 24 * 60 * 60 * 1000;   // stay logged in for 30 days
+
+(function initPinGate() {
+  const gate = document.getElementById('pin-gate');
+  if (!gate) return;
+
+  // Already authenticated?
+  try {
+    const ts = localStorage.getItem('gf_pin_auth');
+    if (ts && (Date.now() - parseInt(ts, 10)) < PIN_EXPIRY) {
+      gate.remove();
+      return; // startApp() called at bottom of file normally
+    }
+  } catch(e) {}
+
+  // Block the normal init — it will be called after PIN passes
+  window._pinPending = true;
+
+  let entered = '';
+
+  function updateDots() {
+    for (let i = 0; i < 4; i++) {
+      const d = document.getElementById('pd' + i);
+      if (d) d.classList.toggle('filled', i < entered.length);
+    }
+  }
+
+  window.pinKey = function(val) {
+    if (val === 'back') {
+      entered = entered.slice(0, -1);
+      updateDots();
+      return;
+    }
+    if (entered.length >= 4) return;
+    entered += val;
+    updateDots();
+    if (entered.length === 4) checkPin();
+  };
+
+  function checkPin() {
+    if (entered === PIN_CODE) {
+      try { localStorage.setItem('gf_pin_auth', Date.now()); } catch(e) {}
+      window._pinPending = false;
+      gate.classList.add('pin-exit');
+      init(); // start loading data while gate fades
+      setTimeout(() => gate.remove(), 380);
+    } else {
+      const dots = document.getElementById('pin-dots');
+      if (dots) {
+        dots.classList.add('pin-shake');
+        setTimeout(() => {
+          dots.classList.remove('pin-shake');
+          entered = '';
+          updateDots();
+        }, 520);
+      }
+    }
+  }
+
+  // Physical keyboard support
+  document.addEventListener('keydown', function kd(e) {
+    if (!document.getElementById('pin-gate')) { document.removeEventListener('keydown', kd); return; }
+    if (e.key >= '0' && e.key <= '9') window.pinKey(e.key);
+    if (e.key === 'Backspace') window.pinKey('back');
+  });
+})();
+
 // ── Notion color → CSS (used for status badges AND entity groups) ──
 const NOTION_COLORS = {
   default: { bg:'#EAE5DF', text:'#404040', headBg:'#9A9490', headText:'#ffffff' },
@@ -686,4 +755,4 @@ function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').
 function fmtDate(s){const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d).toLocaleDateString('en-US',{month:'short',day:'numeric'})}
 function pastDue(s){if(!s)return false;const[y,m,d]=s.split('-').map(Number);const n=new Date();n.setHours(0,0,0,0);return new Date(y,m-1,d)<n}
 
-init();
+if (!window._pinPending) init();
