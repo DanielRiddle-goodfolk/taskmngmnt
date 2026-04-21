@@ -10,6 +10,28 @@ exports.handler = async (event) => {
   try {
     const response = await notion.blocks.children.list({ block_id: pageId, page_size: 100 });
     const getText = (rt) => (rt || []).map(t => t.plain_text).join('');
+
+    // Fetch child blocks for callouts with nested content (in parallel)
+    const calloutBlocks = response.results.filter(b => b.type === 'callout' && b.has_children);
+    const calloutChildMap = {};
+    await Promise.all(calloutBlocks.map(async (b) => {
+      try {
+        const childRes = await notion.blocks.children.list({ block_id: b.id, page_size: 50 });
+        calloutChildMap[b.id] = childRes.results.map(cb => {
+          const ct = cb.type;
+          const cc = cb[ct];
+          if (!cc) return null;
+          if (['paragraph','heading_1','heading_2','heading_3','bulleted_list_item','numbered_list_item','quote'].includes(ct)) {
+            return { type: ct, text: getText(cc.rich_text) };
+          }
+          if (ct === 'to_do') return { type: ct, text: getText(cc.rich_text), checked: cc.checked };
+          return null;
+        }).filter(Boolean);
+      } catch (e) {
+        calloutChildMap[b.id] = [];
+      }
+    }));
+
     const blocks = response.results.map(b => {
       const type = b.type;
       const content = b[type];
@@ -28,7 +50,8 @@ exports.handler = async (event) => {
         case 'callout': {
           const icon = content.icon;
           const emoji = icon?.type === 'emoji' ? icon.emoji : '💡';
-          return { type, text: getText(content.rich_text), emoji };
+          const children = calloutChildMap[b.id] || [];
+          return { type, text: getText(content.rich_text), emoji, children };
         }
         case 'image': {
           const url = content.type === 'external'
@@ -45,7 +68,7 @@ exports.handler = async (event) => {
         case 'embed':
           return content.url ? { type: 'bookmark', url: content.url, caption: '' } : null;
         case 'child_database':
-          return { type, title: content.title || 'Database' };
+          return { type, title: content.title || 'Database', id: b.id };
         case 'divider':
           return { type };
         default:
