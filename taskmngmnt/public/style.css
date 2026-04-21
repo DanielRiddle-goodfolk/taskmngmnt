@@ -170,10 +170,18 @@ html,body{height:100%;font-family:var(--font);color:var(--black);background:var(
 .block-bookmark-url{display:block;font-size:.72rem;color:var(--muted);font-weight:400;margin-top:.15rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 /* ── Child database ──────────────────────────────── */
-.block-db-card{display:flex;align-items:center;gap:.55rem;border:1.5px solid var(--border);border-radius:8px;padding:.55rem .75rem;margin:.35rem 0 .55rem;background:var(--white)}
-.block-db-icon{font-size:1rem;flex-shrink:0}
-.block-db-title{font-size:.88rem;font-weight:600;color:var(--black);flex:1}
-.block-db-label{font-size:.68rem;font-weight:500;color:var(--muted);background:var(--dust);border-radius:20px;padding:.1rem .45rem;flex-shrink:0}
+.block-db-card{border:1.5px solid var(--border);border-radius:10px;margin:.35rem 0 .65rem;background:var(--white);overflow:hidden}
+.block-db-header{display:flex;align-items:center;gap:.5rem;padding:.5rem .75rem;background:var(--dust);border-bottom:1px solid var(--border)}
+.block-db-icon{font-size:.95rem;flex-shrink:0}
+.block-db-title{font-size:.78rem;font-weight:700;color:var(--charcoal);text-transform:uppercase;letter-spacing:.03em}
+.block-db-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.block-db-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.block-db-table thead tr{background:var(--dust)}
+.block-db-table th{padding:.4rem .65rem;text-align:left;font-size:.68rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--border);white-space:nowrap}
+.block-db-table td{padding:.45rem .65rem;border-bottom:1px solid var(--border);color:var(--black);vertical-align:top;line-height:1.4}
+.block-db-table tbody tr:last-child td{border-bottom:none}
+.block-db-table tbody tr:active{background:var(--dust)}
+.db-row-name{font-weight:500}
 
 /* ── Comments ─────────────────────────────────────── */
 .comment-item{display:flex;gap:.6rem;margin-bottom:.85rem}

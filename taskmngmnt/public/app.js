@@ -335,7 +335,25 @@ function renderBlocks(blocks) {
       }
       case 'image':              return `<div class="block-image-wrap"><img class="block-image" src="${esc(b.url)}" alt="${esc(b.caption||'')}" loading="lazy"/>${b.caption?`<p class="block-image-caption">${esc(b.caption)}</p>`:''}</div>`;
       case 'bookmark':           return `<a class="block-bookmark" href="${esc(b.url)}" target="_blank" rel="noopener noreferrer">${esc(b.caption||b.url)}<span class="block-bookmark-url">${esc(b.url)}</span></a>`;
-      case 'child_database':     return `<div class="block-db-card"><span class="block-db-icon">🗃️</span><span class="block-db-title">${esc(b.title)}</span><span class="block-db-label">Linked Database</span></div>`;
+      case 'child_database': {
+        const dbHeader = `<div class="block-db-header"><span class="block-db-icon">🗃️</span><span class="block-db-title">${esc(b.title)}</span></div>`;
+        if (!b.rows || !b.rows.length) {
+          return `<div class="block-db-card">${dbHeader}<p class="block-empty" style="padding:.3rem .1rem .1rem">No rows</p></div>`;
+        }
+        const colHeaders = b.columns && b.columns.length
+          ? `<tr><th>Name</th>${b.columns.map(c => `<th>${esc(c)}</th>`).join('')}</tr>`
+          : `<tr><th>Name</th></tr>`;
+        const rowsHtml = b.rows.map(r => {
+          const extras = b.columns && b.columns.length
+            ? b.columns.map(c => {
+                const ex = r.extras.find(e => e.key === c);
+                return `<td>${esc(ex ? ex.value : '')}</td>`;
+              }).join('')
+            : '';
+          return `<tr><td class="db-row-name">${esc(r.title||'Untitled')}</td>${extras}</tr>`;
+        }).join('');
+        return `<div class="block-db-card">${dbHeader}<div class="block-db-table-wrap"><table class="block-db-table"><thead>${colHeaders}</thead><tbody>${rowsHtml}</tbody></table></div></div>`;
+      }
       case 'divider':            return `<div class="block-divider"></div>`;
       default:                   return b.text ? `<div class="block">${esc(b.text)}</div>` : '';
     }
