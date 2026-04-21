@@ -25,6 +25,27 @@ exports.handler = async (event) => {
           return { type, text: getText(content.rich_text) };
         case 'to_do':
           return { type, text: getText(content.rich_text), checked: content.checked };
+        case 'callout': {
+          const icon = content.icon;
+          const emoji = icon?.type === 'emoji' ? icon.emoji : '💡';
+          return { type, text: getText(content.rich_text), emoji };
+        }
+        case 'image': {
+          const url = content.type === 'external'
+            ? content.external?.url
+            : content.file?.url;
+          const caption = getText(content.caption);
+          return url ? { type, url, caption } : null;
+        }
+        case 'bookmark':
+          return content.url
+            ? { type, url: content.url, caption: getText(content.caption) }
+            : null;
+        case 'link_preview':
+        case 'embed':
+          return content.url ? { type: 'bookmark', url: content.url, caption: '' } : null;
+        case 'child_database':
+          return { type, title: content.title || 'Database' };
         case 'divider':
           return { type };
         default:
