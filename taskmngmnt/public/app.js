@@ -319,10 +319,23 @@ function renderBlocks(blocks) {
       case 'numbered_list_item': n++; return `<div class="block block-numbered"><span class="block-num">${n}.</span><span>${esc(b.text)}</span></div>`;
       case 'to_do':              return `<div class="block block-todo ${b.checked?'checked-item':''}"><span class="block-checkbox ${b.checked?'checked':''}"></span><span class="block-todo-text">${esc(b.text)}</span></div>`;
       case 'quote':              return `<div class="block block-quote">${esc(b.text)}</div>`;
-      case 'callout':            return `<div class="block block-callout"><span class="block-callout-icon">${esc(b.emoji)}</span><span>${esc(b.text)}</span></div>`;
+      case 'callout': {
+        const calloutHeader = b.text ? `<div class="block-callout-title">${esc(b.text)}</div>` : '';
+        const calloutBody = b.children && b.children.length
+          ? b.children.map(c => {
+              switch(c.type) {
+                case 'bulleted_list_item': return `<div class="block-callout-child block-bullet"><span class="block-bullet-dot"></span><span>${esc(c.text)}</span></div>`;
+                case 'numbered_list_item': return `<div class="block-callout-child block-numbered"><span class="block-num">•</span><span>${esc(c.text)}</span></div>`;
+                case 'to_do':              return `<div class="block-callout-child block-todo ${c.checked?'checked-item':''}"><span class="block-checkbox ${c.checked?'checked':''}"></span><span class="block-todo-text">${esc(c.text)}</span></div>`;
+                default:                   return c.text ? `<div class="block-callout-child">${esc(c.text)}</div>` : '';
+              }
+            }).join('')
+          : '';
+        return `<div class="block block-callout"><span class="block-callout-icon">${esc(b.emoji)}</span><div class="block-callout-content">${calloutHeader}${calloutBody}</div></div>`;
+      }
       case 'image':              return `<div class="block-image-wrap"><img class="block-image" src="${esc(b.url)}" alt="${esc(b.caption||'')}" loading="lazy"/>${b.caption?`<p class="block-image-caption">${esc(b.caption)}</p>`:''}</div>`;
       case 'bookmark':           return `<a class="block-bookmark" href="${esc(b.url)}" target="_blank" rel="noopener noreferrer">${esc(b.caption||b.url)}<span class="block-bookmark-url">${esc(b.url)}</span></a>`;
-      case 'child_database':     return `<div class="block block-db"><span class="block-db-icon">🗃️</span><span>${esc(b.title)}</span></div>`;
+      case 'child_database':     return `<div class="block-db-card"><span class="block-db-icon">🗃️</span><span class="block-db-title">${esc(b.title)}</span><span class="block-db-label">Linked Database</span></div>`;
       case 'divider':            return `<div class="block-divider"></div>`;
       default:                   return b.text ? `<div class="block">${esc(b.text)}</div>` : '';
     }
