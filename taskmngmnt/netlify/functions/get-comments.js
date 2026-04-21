@@ -9,6 +9,21 @@ exports.handler = async (event) => {
   }
   try {
     const response = await notion.comments.list({ block_id: pageId });
+
+    // Collect unique commenter IDs, then resolve names in parallel
+    const userIds = [...new Set(
+      response.results.map(c => c.created_by?.id).filter(Boolean)
+    )];
+    const userMap = {};
+    await Promise.all(userIds.map(async (id) => {
+      try {
+        const user = await notion.users.retrieve({ user_id: id });
+        userMap[id] = user.name || 'Unknown';
+      } catch (e) {
+        userMap[id] = 'Unknown';
+      }
+    }));
+
     const comments = response.results.map(c => {
       const text = (c.rich_text || []).map(t => t.plain_text).join('');
       const date = new Date(c.created_time);
@@ -16,7 +31,7 @@ exports.handler = async (event) => {
                  date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
       return {
         id: c.id,
-        author: c.created_by?.name || 'Unknown',
+        author: userMap[c.created_by?.id] || 'Unknown',
         text,
         ts,
       };
