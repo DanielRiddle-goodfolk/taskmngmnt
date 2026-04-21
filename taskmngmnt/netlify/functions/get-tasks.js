@@ -9,14 +9,18 @@ exports.handler = async () => {
     const db = await notion.databases.retrieve({ database_id: DATABASE_ID });
     const statusProp = db.properties['Status'];
     const statusNameToGroup = {};
+    const statusNameToColor = {};
     if (statusProp?.type === 'status') {
       const options  = statusProp.status.options  || [];
       const groups   = statusProp.status.groups   || [];
       // Build optionId → groupName
       const idToGroup = {};
       groups.forEach(g => (g.option_ids || []).forEach(id => { idToGroup[id] = g.name; }));
-      // Build statusName → groupName
-      options.forEach(o => { statusNameToGroup[o.name] = idToGroup[o.id] || 'To-do'; });
+      // Build statusName → groupName and statusName → color
+      options.forEach(o => {
+        statusNameToGroup[o.name] = idToGroup[o.id] || 'To-do';
+        statusNameToColor[o.name] = o.color || 'default';
+      });
     }
 
     // Fetch all tasks (paginated)
@@ -43,6 +47,7 @@ exports.handler = async () => {
         taskName:    props['Task Name']?.title?.map((t) => t.plain_text).join('') || '',
         status:      statusName,
         statusGroup: statusNameToGroup[statusName] || 'To-do',
+        statusColor: statusNameToColor[statusName] || 'default',
         person:      props['Person']?.people?.map((p) => ({
                        id: p.id,
                        name: p.name || 'Unknown',
