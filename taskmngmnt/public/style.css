@@ -151,6 +151,24 @@ html,body{height:100%;font-family:var(--font);color:var(--black);background:var(
 .block-quote{border-left:3px solid var(--mint-dark);padding-left:.7rem;color:var(--muted);font-style:italic;font-size:.9rem;line-height:1.6}
 .block-divider{height:1px;background:var(--border);margin:.5rem 0}
 
+/* ── Callout ─────────────────────────────────────── */
+.block-callout{display:flex;gap:.55rem;align-items:flex-start;background:var(--dust);border-radius:8px;padding:.55rem .7rem;margin-bottom:.45rem}
+.block-callout-icon{flex-shrink:0;font-size:1rem;margin-top:.05em}
+
+/* ── Image ───────────────────────────────────────── */
+.block-image-wrap{margin:.5rem 0 .65rem}
+.block-image{width:100%;border-radius:8px;display:block;max-height:260px;object-fit:cover}
+.block-image-caption{font-size:.75rem;color:var(--muted);margin-top:.3rem;text-align:center;font-style:italic}
+
+/* ── Bookmark / embed / link preview ─────────────── */
+.block-bookmark{display:block;padding:.6rem .75rem;border:1.5px solid var(--border);border-radius:8px;margin:.35rem 0 .55rem;font-size:.88rem;font-weight:600;color:var(--charcoal);text-decoration:none;line-height:1.4;transition:background .15s;word-break:break-all}
+.block-bookmark:active{background:var(--dust)}
+.block-bookmark-url{display:block;font-size:.72rem;color:var(--muted);font-weight:400;margin-top:.15rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* ── Child database ──────────────────────────────── */
+.block-db{display:flex;gap:.5rem;align-items:center;color:var(--muted);font-size:.85rem;font-style:italic;background:var(--dust);border-radius:8px;padding:.45rem .65rem;margin-bottom:.4rem}
+.block-db-icon{font-size:.95rem;flex-shrink:0}
+
 /* ── Comments ─────────────────────────────────────── */
 .comment-item{display:flex;gap:.6rem;margin-bottom:.85rem}
 .comment-av{width:28px;height:28px;border-radius:50%;background:var(--mint);color:#2D5045;font-size:.62rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:.1rem}
