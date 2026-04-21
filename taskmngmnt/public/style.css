@@ -106,7 +106,7 @@ html,body{height:100%;font-family:var(--font);color:var(--black);background:var(
 .sheet.open{transform:translateY(0)}
 .sheet-handle-wrap{padding:10px 0 2px;display:flex;justify-content:center;flex-shrink:0}
 .sheet-handle{width:36px;height:4px;background:var(--dust-dark);border-radius:2px}
-.sheet-scroll{overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 1.25rem 1.25rem;flex:1}
+.sheet-scroll{overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;padding:0 1.25rem 1.25rem;flex:1}
 .sheet-title{font-size:1.05rem;font-weight:700;margin-bottom:1rem;padding-top:.2rem;color:var(--black)}
 .field{display:flex;flex-direction:column;gap:.3rem;margin-bottom:.8rem}
 .field label{font-size:.77rem;font-weight:600;color:var(--muted)}
@@ -152,8 +152,12 @@ html,body{height:100%;font-family:var(--font);color:var(--black);background:var(
 .block-divider{height:1px;background:var(--border);margin:.5rem 0}
 
 /* ── Callout ─────────────────────────────────────── */
-.block-callout{display:flex;gap:.55rem;align-items:flex-start;background:var(--dust);border-radius:8px;padding:.55rem .7rem;margin-bottom:.45rem}
-.block-callout-icon{flex-shrink:0;font-size:1rem;margin-top:.05em}
+.block-callout{display:flex;gap:.55rem;align-items:flex-start;background:var(--dust);border-radius:8px;padding:.6rem .75rem;margin-bottom:.5rem}
+.block-callout-icon{flex-shrink:0;font-size:1.05rem;margin-top:.1em}
+.block-callout-content{flex:1;min-width:0}
+.block-callout-title{font-size:.9rem;font-weight:600;color:var(--black);line-height:1.5;margin-bottom:.25rem}
+.block-callout-title:only-child{margin-bottom:0}
+.block-callout-child{font-size:.87rem;color:var(--charcoal);line-height:1.55;margin-bottom:.2rem}
 
 /* ── Image ───────────────────────────────────────── */
 .block-image-wrap{margin:.5rem 0 .65rem}
@@ -166,8 +170,10 @@ html,body{height:100%;font-family:var(--font);color:var(--black);background:var(
 .block-bookmark-url{display:block;font-size:.72rem;color:var(--muted);font-weight:400;margin-top:.15rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 /* ── Child database ──────────────────────────────── */
-.block-db{display:flex;gap:.5rem;align-items:center;color:var(--muted);font-size:.85rem;font-style:italic;background:var(--dust);border-radius:8px;padding:.45rem .65rem;margin-bottom:.4rem}
-.block-db-icon{font-size:.95rem;flex-shrink:0}
+.block-db-card{display:flex;align-items:center;gap:.55rem;border:1.5px solid var(--border);border-radius:8px;padding:.55rem .75rem;margin:.35rem 0 .55rem;background:var(--white)}
+.block-db-icon{font-size:1rem;flex-shrink:0}
+.block-db-title{font-size:.88rem;font-weight:600;color:var(--black);flex:1}
+.block-db-label{font-size:.68rem;font-weight:500;color:var(--muted);background:var(--dust);border-radius:20px;padding:.1rem .45rem;flex-shrink:0}
 
 /* ── Comments ─────────────────────────────────────── */
 .comment-item{display:flex;gap:.6rem;margin-bottom:.85rem}
