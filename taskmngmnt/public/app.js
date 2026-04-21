@@ -319,6 +319,10 @@ function renderBlocks(blocks) {
       case 'numbered_list_item': n++; return `<div class="block block-numbered"><span class="block-num">${n}.</span><span>${esc(b.text)}</span></div>`;
       case 'to_do':              return `<div class="block block-todo ${b.checked?'checked-item':''}"><span class="block-checkbox ${b.checked?'checked':''}"></span><span class="block-todo-text">${esc(b.text)}</span></div>`;
       case 'quote':              return `<div class="block block-quote">${esc(b.text)}</div>`;
+      case 'callout':            return `<div class="block block-callout"><span class="block-callout-icon">${esc(b.emoji)}</span><span>${esc(b.text)}</span></div>`;
+      case 'image':              return `<div class="block-image-wrap"><img class="block-image" src="${esc(b.url)}" alt="${esc(b.caption||'')}" loading="lazy"/>${b.caption?`<p class="block-image-caption">${esc(b.caption)}</p>`:''}</div>`;
+      case 'bookmark':           return `<a class="block-bookmark" href="${esc(b.url)}" target="_blank" rel="noopener noreferrer">${esc(b.caption||b.url)}<span class="block-bookmark-url">${esc(b.url)}</span></a>`;
+      case 'child_database':     return `<div class="block block-db"><span class="block-db-icon">🗃️</span><span>${esc(b.title)}</span></div>`;
       case 'divider':            return `<div class="block-divider"></div>`;
       default:                   return b.text ? `<div class="block">${esc(b.text)}</div>` : '';
     }
