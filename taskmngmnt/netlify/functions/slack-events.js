@@ -20,7 +20,7 @@ exports.handler = async (event) => {
 
   // Forward app_mention events to Zapier
   if (body.event && body.event.type === 'app_mention') {
-    await fetch('YOUR_ZAPIER_CATCH_HOOK_URL', {
+    await fetch('https://hooks.zapier.com/hooks/catch/3282298/uvyxc1x/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body.event)
